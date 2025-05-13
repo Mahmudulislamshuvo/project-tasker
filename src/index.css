@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+/* @theme {
+  --font-*: initial; /* if need to change defualt name */
+/* --font-sans: "Poppinsqwuie"; */
+/* for custom fonts  */
+/* --font-Roboto: "Roboto" "sarif"; */
+/* }  */
