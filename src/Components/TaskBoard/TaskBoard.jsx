@@ -3,6 +3,7 @@ import ActionButtons from "./ActionButtons";
 import Searchbar from "./Searchbar";
 import TaskList from "./TaskList";
 import ReactModals from "./ReactModal";
+import NoTaskAvail from "./NoTaskAvail";
 
 const TaskBoard = () => {
   const defaultTask = {
@@ -66,12 +67,19 @@ const TaskBoard = () => {
     setTask(newFev);
   };
 
+  const handleSrach = (seraching) => {
+    const finteredItem = Task.filter((item) =>
+      item.title.toLowerCase().includes(seraching.toLowerCase())
+    );
+    setTask([...finteredItem]);
+  };
+
   return (
     <>
       <div className="mb-20" id="tasks">
         <div className="container">
           <div className="p-2 flex justify-end">
-            <Searchbar />
+            <Searchbar onSearch={handleSrach} />
           </div>
 
           <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
@@ -79,12 +87,18 @@ const TaskBoard = () => {
               onAddTaskButtonClick={() => setIsOpen(true)}
               DeleteAllTaskClick={handleDeleteAllTask}
             />
-            <TaskList
-              Tasks={Task}
-              editTask={editTask}
-              HandleDelete={HandleDelete}
-              onFevorite={handleIsFevorite}
-            />
+            {Task.length > 0 ? (
+              <TaskList
+                Tasks={Task}
+                editTask={editTask}
+                HandleDelete={HandleDelete}
+                onFevorite={handleIsFevorite}
+              />
+            ) : (
+              <div>
+                <NoTaskAvail />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,10 +1,15 @@
-const Searchbar = () => {
-  const hanldesubmit = (e) => {
-    e.preventDefault();
+import { useState } from "react";
+
+const Searchbar = ({ onSearch }) => {
+  const [searchtitle, setsearchtitle] = useState("");
+
+  const handlesubmit = () => {
+    onSearch(searchtitle);
   };
+
   return (
     <>
-      <form onSubmit={hanldesubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <div className="flex">
           <div className="relative overflow-hidden rounded-lg text-gray-50 md:min-w-[380px] lg:min-w-[440px]">
             <input
@@ -12,9 +17,12 @@ const Searchbar = () => {
               id="search-dropdown"
               className="z-20 block w-full bg-gray-800 px-4 py-2 pr-10 focus:outline-none"
               placeholder="Search Task"
+              value={searchtitle}
+              onChange={(e) => setsearchtitle(e.target.value)}
               required
             />
             <button
+              onClick={handlesubmit}
               type="submit"
               className="absolute right-2 top-0 h-full rounded-e-lg text-white md:right-4"
             >
