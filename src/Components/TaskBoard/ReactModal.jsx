@@ -1,6 +1,6 @@
-import { IoIosCloseCircleOutline, IoMdCloseCircle } from "react-icons/io";
+import { useState } from "react";
+import { IoMdCloseCircle } from "react-icons/io";
 import Modal from "react-modal";
-
 const customStyles = {
   content: {
     top: "50%",
@@ -9,73 +9,119 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+    maxHeight: "80%",
+    maxWidth: "90%",
+    width: "500px",
+    padding: "20px",
+    backgroundColor: "#1f2937",
+    borderRadius: "8px",
+    overflowY: "auto",
+    marginTop: "50px",
   },
 };
 
-const ReactModals = ({
-  openModal,
-  afterOpenModal,
-  closeModal,
-  modalIsOpen,
-}) => {
+Modal.setAppElement("#root");
+
+const ReactModals = ({ closeModal, modalIsOpen, onSave }) => {
+  const addToTaskonj = {
+    id: crypto.randomUUID(),
+    title: "",
+    description: "",
+    tegs: [],
+    priority: "",
+    isFavorite: false,
+  };
+  const [tasks, setTasks] = useState(addToTaskonj);
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    let value = e.target.value;
+    if (name === "tegs") {
+      value = value.split(",");
+    }
+    setTasks({ ...tasks, [name]: value });
+  };
+
   return (
     <>
-      <button onClick={openModal}>Open Modal</button>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="Task Modal"
       >
-        <button onClick={closeModal}>
-          <IoMdCloseCircle className="w-5 h-5 text-white rounded-full bg-red-500 cursor-po" />
+        <button
+          onClick={closeModal}
+          className="absolute top-3 right-3 text-white"
+        >
+          <IoMdCloseCircle className="w-6 h-6 text-red-500 cursor-pointer" />
         </button>
-        <div>I am a modal</div>
-        <form>
-          <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]"></h2>
 
-          <div className="space-y-9 text-white lg:space-y-10">
-            <div className="space-y-2 lg:space-y-3">
-              <label htmlFor="title">Title</label>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <h2 className="mb-2 text-center text-lg font-bold text-white">
+            Create a Task
+          </h2>
+
+          <div className="space-y-4">
+            {/* Title Field */}
+            <div className="space-y-1">
+              <label htmlFor="title" className="text-sm text-white">
+                Title
+              </label>
               <input
-                className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
+                className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5 text-white"
                 type="text"
                 name="title"
                 id="title"
+                value={tasks.title}
+                onChange={handleChange}
                 required
               />
             </div>
 
-            <div className="space-y-2 lg:space-y-3">
-              <label htmlFor="description">Description</label>
+            {/* Description Field */}
+            <div className="space-y-2">
+              <label htmlFor="description" className="text-sm text-white">
+                Description
+              </label>
               <textarea
-                className="block min-h-[120px] w-full rounded-md bg-[#2D323F] px-3 py-2.5 lg:min-h-[180px]"
-                type="text"
+                className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5 text-white min-h-[120px] lg:min-h-[180px]"
                 name="description"
                 id="description"
+                value={tasks.description}
+                onChange={handleChange}
                 required
               ></textarea>
             </div>
 
-            <div className="grid-cols-2 gap-x-4 max-md:space-y-9 md:grid lg:gap-x-10 xl:gap-x-20">
-              <div className="space-y-2 lg:space-y-3">
-                <label htmlFor="tags">Tags</label>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+              {/* Tags Field */}
+              <div className="space-y-2">
+                <label htmlFor="tags" className="text-sm text-white">
+                  Tags
+                </label>
                 <input
-                  className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5"
+                  className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5 text-white"
                   type="text"
-                  name="tags"
-                  id="tags"
+                  name="tegs"
+                  id="tegs"
+                  value={tasks.tegs}
+                  onChange={handleChange}
                   required
                 />
               </div>
 
-              <div className="space-y-2 lg:space-y-3">
-                <label htmlFor="priority">Priority</label>
+              {/* Priority Field */}
+              <div className="space-y-2">
+                <label htmlFor="priority" className="text-sm text-white">
+                  Priority
+                </label>
                 <select
-                  className="block w-full cursor-pointer rounded-md bg-[#2D323F] px-3 py-2.5"
+                  className="block w-full rounded-md bg-[#2D323F] px-3 py-2.5 text-white"
                   name="priority"
                   id="priority"
+                  value={tasks.priority}
+                  onChange={handleChange}
                   required
                 >
                   <option value="">Select Priority</option>
@@ -87,16 +133,18 @@ const ReactModals = ({
             </div>
           </div>
 
-          <div className="mt-16 flex justify-between lg:mt-20">
+          {/* Action Buttons */}
+          <div className="mt-8 flex justify-between">
             <button
               onClick={closeModal}
-              className="rounded bg-red-600 px-4 py-2 text-white transition-all hover:opacity-80"
+              className="bg-red-600 text-white rounded-md px-4 py-2 hover:opacity-80 transition-all"
             >
               Close
             </button>
             <button
+              onClick={() => onSave(tasks)}
               type="submit"
-              className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
+              className="bg-blue-600 text-white rounded-md px-4 py-2 hover:opacity-80 transition-all"
             >
               Save
             </button>

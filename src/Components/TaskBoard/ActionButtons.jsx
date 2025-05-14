@@ -1,19 +1,13 @@
 import ReactModals from "./ReactModal";
 
-const ActionButtons = ({
-  DoingSomething,
-  openModal,
-  afterOpenModal,
-  closeModal,
-  modalIsOpen,
-}) => {
+const ActionButtons = ({ onAddTaskButtonClick }) => {
   return (
     <>
       <div className="mb-14 items-center justify-between sm:flex">
         <h2 className="text-2xl font-semibold max-sm:mb-4">Your Tasks</h2>
         <div className="flex items-center space-x-5">
           <button
-            onClick={DoingSomething}
+            onClick={onAddTaskButtonClick}
             className="rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold"
           >
             Add Task
@@ -23,14 +17,6 @@ const ActionButtons = ({
           </button>
         </div>
       </div>
-      {modalIsOpen && (
-        <ReactModals
-          openModal={openModal}
-          afterOpenModal={afterOpenModal}
-          closeModal={closeModal}
-          modalIsOpen={modalIsOpen}
-        />
-      )}
     </>
   );
 };
