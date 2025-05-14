@@ -1,6 +1,6 @@
 import { FaStar } from "react-icons/fa6";
 
-const TaskList = ({ Tasks }) => {
+const TaskList = ({ Tasks, editTask, HandleDelete, onFevorite }) => {
   return (
     <>
       <div className="overflow-auto">
@@ -33,11 +33,13 @@ const TaskList = ({ Tasks }) => {
               >
                 {/* svg star */}
                 <td>
-                  {task.isFavorite ? (
-                    <FaStar color="yellow" />
-                  ) : (
-                    <FaStar color="grey" />
-                  )}
+                  <button onClick={() => onFevorite(task.id)}>
+                    {task.isFavorite ? (
+                      <FaStar color="yellow" />
+                    ) : (
+                      <FaStar color="grey" />
+                    )}
+                  </button>
                 </td>
                 {/* svg star End */}
                 <td>{task.title}</td>
@@ -69,8 +71,18 @@ const TaskList = ({ Tasks }) => {
                 <td className="text-center">{task.priority}</td>
                 <td>
                   <div className="flex items-center justify-center space-x-3">
-                    <button className="text-red-500">Delete</button>
-                    <button className="text-blue-500">Edit</button>
+                    <button
+                      onClick={() => HandleDelete(task.id)}
+                      className="text-red-500"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => editTask(task)}
+                      className="text-blue-500"
+                    >
+                      Edit
+                    </button>
                   </div>
                 </td>
               </tr>

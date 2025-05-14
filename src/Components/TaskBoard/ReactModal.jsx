@@ -22,7 +22,7 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-const ReactModals = ({ closeModal, modalIsOpen, onSave }) => {
+const ReactModals = ({ closeModal, modalIsOpen, onSave, updateTask }) => {
   const addToTaskonj = {
     id: crypto.randomUUID(),
     title: "",
@@ -31,7 +31,8 @@ const ReactModals = ({ closeModal, modalIsOpen, onSave }) => {
     priority: "",
     isFavorite: false,
   };
-  const [tasks, setTasks] = useState(addToTaskonj);
+  const [tasks, setTasks] = useState(updateTask || addToTaskonj);
+  const [isAdd, setIAdd] = useState(Object.is(updateTask, null));
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -59,7 +60,7 @@ const ReactModals = ({ closeModal, modalIsOpen, onSave }) => {
 
         <form onSubmit={(e) => e.preventDefault()}>
           <h2 className="mb-2 text-center text-lg font-bold text-white">
-            Create a Task
+            {isAdd ? "Create a Task" : "Edit Task"}
           </h2>
 
           <div className="space-y-4">
@@ -142,11 +143,11 @@ const ReactModals = ({ closeModal, modalIsOpen, onSave }) => {
               Close
             </button>
             <button
-              onClick={() => onSave(tasks)}
+              onClick={() => onSave(tasks, isAdd)}
               type="submit"
               className="bg-blue-600 text-white rounded-md px-4 py-2 hover:opacity-80 transition-all"
             >
-              Save
+              {isAdd ? "Add Task" : "Update"}
             </button>
           </div>
         </form>

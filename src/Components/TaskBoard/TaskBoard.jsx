@@ -15,17 +15,57 @@ const TaskBoard = () => {
     isFavorite: true,
   };
   const [Task, setTask] = useState([defaultTask]);
-
+  const [updateTask, setupdateTask] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
+    setupdateTask(null);
   }
 
-  const onAddtoCart = (newTask) => {
-    setTask([...Task, newTask]);
+  const onAddtoCartEdit = (newTask, isAdd) => {
+    if (isAdd) {
+      setTask([...Task, newTask]);
+    } else {
+      setTask(
+        Task.map((task) => {
+          if (task.id === newTask.id) {
+            return newTask;
+          }
+          return task;
+        })
+      );
+    }
+
     setIsOpen(false);
+    setupdateTask(null);
   };
+
+  const editTask = (editTask) => {
+    setupdateTask(editTask);
+    setIsOpen(true);
+  };
+
+  const handleDeleteAllTask = () => {
+    Task.length = 0;
+    setTask([...Task]);
+  };
+
+  const HandleDelete = (TaskId) => {
+    const afterDeletedTask = Task.filter((task) => TaskId !== task.id);
+    setTask(afterDeletedTask);
+  };
+
+  const handleIsFevorite = (TaskId) => {
+    console.log(TaskId);
+
+    const taskIndex = Task.findIndex((taskss) => taskss.id === TaskId);
+    const newFev = [...Task];
+    newFev[taskIndex].isFavorite = !newFev[taskIndex].isFavorite;
+
+    setTask(newFev);
+  };
+
   return (
     <>
       <div className="mb-20" id="tasks">
@@ -35,8 +75,16 @@ const TaskBoard = () => {
           </div>
 
           <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
-            <ActionButtons onAddTaskButtonClick={() => setIsOpen(true)} />
-            <TaskList Tasks={Task} />
+            <ActionButtons
+              onAddTaskButtonClick={() => setIsOpen(true)}
+              DeleteAllTaskClick={handleDeleteAllTask}
+            />
+            <TaskList
+              Tasks={Task}
+              editTask={editTask}
+              HandleDelete={HandleDelete}
+              onFevorite={handleIsFevorite}
+            />
           </div>
         </div>
       </div>
@@ -44,7 +92,8 @@ const TaskBoard = () => {
         <ReactModals
           closeModal={closeModal}
           modalIsOpen={modalIsOpen}
-          onSave={onAddtoCart}
+          onSave={onAddtoCartEdit}
+          updateTask={updateTask}
         />
       )}
     </>
