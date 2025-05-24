@@ -1,6 +1,6 @@
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Nav";
-import HeroSection from "./Components/HeroSection/Hero";
+import HeroSection from "./Components/TaskBoard/HeroSection/Hero";
 import TaskBoard from "./Components/TaskBoard/TaskBoard";
 import "./App.css";
 
